@@ -13,6 +13,8 @@ builder.Services.AddHttpClient("BlazorApp.WebApi", client => client.BaseAddress 
     .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
 
 
+builder.Services.AddHttpClient<IGetForecastDataWithToken, GetForecastDataWithToken>("test", client => client.BaseAddress = new Uri("https://localhost:7189/"));
+
 
 builder.Services.AddMsalAuthentication(options =>
 {

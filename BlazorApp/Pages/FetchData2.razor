@@ -1,10 +1,10 @@
-﻿@page "/fetchdata2"
+﻿@page "/fetchdata"
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@inject IHttpClientFactory ClientFactory
 
-@inject  IGetForecastDataWithToken Dataservice;
-<PageTitle>Weather forecast 2</PageTitle>
+<PageTitle>Weather forecast</PageTitle>
 
-<h1>Weather forecast 2</h1>
+<h1>Weather forecast</h1>
 
 <p>This component demonstrates fetching data from the server.</p>
 
@@ -42,7 +42,20 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-      forecasts = await Dataservice.GetWeatherForecasts();
+        var client = ClientFactory.CreateClient("BlazorApp.WebApi");
+        try
+        {
+            forecasts = await client.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
+
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+        catch(Exception ex)
+        {
+            
+        }
     }
 
     public class WeatherForecast
